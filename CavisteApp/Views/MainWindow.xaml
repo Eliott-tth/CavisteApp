@@ -42,6 +42,10 @@
                      Visibility="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur, Converter={StaticResource BoolToVis}}">
                 <views:AlerteCommandeView/>
             </TabItem>
+            <TabItem Header="Génération"
+                     Visibility="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur, Converter={StaticResource BoolToVis}}">
+                <views:GenerationView/>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

@@ -97,7 +97,8 @@ namespace CavisteApp.Migrations
                     Stock = table.Column<int>(type: "INTEGER", nullable: false),
                     SeuilBas = table.Column<int>(type: "INTEGER", nullable: false),
                     FournisseurId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Origine = table.Column<string>(type: "TEXT", nullable: true)
+                    Origine = table.Column<string>(type: "TEXT", nullable: true),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

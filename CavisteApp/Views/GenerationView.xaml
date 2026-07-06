@@ -1,0 +1,101 @@
+<UserControl x:Class="CavisteApp.Views.GenerationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:CavisteApp.ViewModels"
+             xmlns:conv="clr-namespace:CavisteApp.Converters">
+
+    <UserControl.Resources>
+        <conv:InverseBooleanConverter x:Key="InverseBoolConverter"/>
+    </UserControl.Resources>
+
+    <UserControl.DataContext>
+        <vm:GenerationViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer>
+        <StackPanel Margin="24" MaxWidth="640" HorizontalAlignment="Left"
+                    IsEnabled="{Binding GenerationEnCours, Converter={StaticResource InverseBoolConverter}}">
+
+            <TextBlock Text="Génération de données de test" FontSize="22" FontWeight="Bold" Margin="0,0,0,4"/>
+            <TextBlock Text="Peuple rapidement l'application pour la démonstration : stock, fournisseurs, clients, commandes et ventes."
+                       Foreground="DimGray" TextWrapping="Wrap" Margin="0,0,0,24"/>
+
+            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="6" Padding="20" Margin="0,0,0,24"
+                    Background="#F7F5F3">
+                <StackPanel>
+                    <TextBlock Text="Tout générer en une fois" FontWeight="Bold" FontSize="15" Margin="0,0,0,8"/>
+                    <TextBlock Text="Ordre appliqué : stock, puis fournisseurs, clients, commandes fournisseur, et enfin ventes."
+                               Foreground="DimGray" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                    <Button Content="Tout générer" Command="{Binding GenererToutCommand}"
+                            Padding="12,10" Background="#2C2A28" Foreground="White" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="Génération détaillée" FontWeight="Bold" FontSize="15" Margin="0,0,0,12"/>
+
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Stock : recalcule aléatoirement la quantité de chaque vin (environ 30% restent sous leur seuil pour garder des alertes visibles)."
+                           TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <Button Grid.Column="1" Content="Randomiser" Command="{Binding RandomiserStockCommand}" Padding="10,6"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Fournisseurs : crée des fournisseurs fictifs (nom, email, téléphone, adresse), sans dépendre d'une API externe."
+                           TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <TextBox Grid.Column="1" Text="{Binding NombreFournisseurs, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Button Grid.Column="2" Content="Générer" Command="{Binding GenererFournisseursCommand}" Padding="10,6"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Clients : génère des clients réalistes via l'API randomuser.me (nom, prénom, email, adresse)."
+                           TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <TextBox Grid.Column="1" Text="{Binding NombreClients, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Button Grid.Column="2" Content="Générer" Command="{Binding GenererClientsCommand}" Padding="10,6"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Commandes fournisseur : crée des commandes aléatoires pour des vins ayant un fournisseur associé."
+                           TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <TextBox Grid.Column="1" Text="{Binding NombreCommandes, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Button Grid.Column="2" Content="Générer" Command="{Binding GenererCommandesCommand}" Padding="10,6"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Ventes : crée des ventes aléatoires (client + 1 à 3 vins en stock) et décrémente réellement le stock."
+                           TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <TextBox Grid.Column="1" Text="{Binding NombreVentes, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Button Grid.Column="2" Content="Générer" Command="{Binding GenererVentesCommand}" Padding="10,6"/>
+            </Grid>
+
+            <TextBlock Text="{Binding MessageStatut}" TextWrapping="Wrap" Foreground="DimGray"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

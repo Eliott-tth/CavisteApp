@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CavisteApp.Migrations
 {
     [DbContext(typeof(CavisteDbContext))]
-    [Migration("20260706101212_AjoutImageVin")]
-    partial class AjoutImageVin
+    [Migration("20260706122341_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
