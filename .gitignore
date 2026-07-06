@@ -1,0 +1,14 @@
+﻿## .NET / Visual Studio
+bin/
+obj/
+*.user
+.vs/
+
+## Base de données locale (générée au runtime, ne pas versionner)
+*.db
+*.db-shm
+*.db-wal
+
+## Secrets
+appsettings.Local.json
+*.env
