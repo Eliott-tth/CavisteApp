@@ -135,3 +135,4 @@ public partial class ClientListViewModel : ObservableObject
         AdressePostale = string.Empty;
     }
 }
+//
