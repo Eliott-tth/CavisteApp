@@ -19,7 +19,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Vins en alerte -->
         <DockPanel Grid.Row="0" Margin="0,0,0,12">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
                 <TextBlock Text="Vins sous leur seuil de stock" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
@@ -71,7 +70,6 @@
             </DataGrid>
         </DockPanel>
 
-        <!-- Commandes fournisseur -->
         <DockPanel Grid.Row="1">
             <TextBlock DockPanel.Dock="Top" Text="Commandes fournisseur" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
 

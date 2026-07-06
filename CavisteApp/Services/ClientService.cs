@@ -4,13 +4,6 @@ using Microsoft.Data.Sqlite;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// CRUD sur l'entité Client réalisé en SQL brut via ADO.NET (Microsoft.Data.Sqlite),
-/// conformément à l'exigence "fonctions CRUD réalisées à l'aide de requêtes
-/// primitives" du cahier des charges. Le nom de la table ("Clients") et des
-/// colonnes correspond exactement au schéma généré par la migration EF Core
-/// pour l'entité Client, afin que les deux approches cohabitent sur la même base.
-/// </summary>
 public class ClientService
 {
     public async Task<List<Client>> ListerAsync()

@@ -7,10 +7,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CavisteApp.ViewModels;
 
-/// <summary>
-/// Page d'administration des comptes utilisateurs : changement de rôle
-/// (Visiteur/Administrateur) et suppression. Réservée à l'administrateur.
-/// </summary>
 public partial class UtilisateurListViewModel : ObservableObject
 {
     private readonly UtilisateurService _utilisateurService = new();

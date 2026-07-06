@@ -13,3 +13,6 @@ CavisteApp/obj/
 CavisteApp/appsettings.json
 CavisteApp/appsettings.Local.json
 *.env
+
+## Tickets PDF générés au runtime
+CavisteApp/bin/Debug/**/Tickets/

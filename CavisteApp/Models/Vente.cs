@@ -3,11 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CavisteApp.Models;
 
-/// <summary>
-/// Vente enregistrée en caisse. Une vente est composée d'une ou plusieurs
-/// <see cref="LigneVente"/> et déclenche la décrémentation du stock ainsi que
-/// la génération du ticket PDF.
-/// </summary>
 public class Vente
 {
     [Key]
@@ -24,10 +19,6 @@ public class Vente
     public decimal MontantTotal => Lignes.Sum(l => l.Quantite * l.PrixUnitaire);
 }
 
-/// <summary>
-/// Ligne de détail d'une vente : quantité d'un vin donné vendue à un prix figé
-/// au moment de la transaction (le prix catalogue du vin peut changer ensuite).
-/// </summary>
 public class LigneVente
 {
     [Key]

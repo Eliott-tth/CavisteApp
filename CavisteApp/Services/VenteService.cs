@@ -8,11 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Gère la création des ventes : vérifie le stock disponible, décrémente le
-/// stock des vins vendus, persiste la vente avec ses lignes (EF Core), et
-/// déclenche automatiquement l'alerte email si un vin passe sous son seuil.
-/// </summary>
 public class VenteService
 {
     private readonly AlerteAutomatiqueService _alerteService = new();
@@ -27,11 +22,6 @@ public class VenteService
             .ToListAsync();
     }
 
-    /// <summary>
-    /// Crée une vente pour un client avec une liste de lignes (vin, quantité).
-    /// Lève une exception si le stock est insuffisant pour un des vins : dans ce
-    /// cas, rien n'est enregistré (transaction annulée).
-    /// </summary>
     public async Task<Vente> CreerVenteAsync(int clientId, List<(int VinId, int Quantite)> lignes)
     {
         using var db = new CavisteDbContext();

@@ -7,10 +7,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CavisteApp.ViewModels;
 
-/// <summary>
-/// Gère la liste des clients et le formulaire d'édition. Le CRUD passe par
-/// <see cref="ClientService"/> (SQL brut / ADO.NET).
-/// </summary>
 public partial class ClientListViewModel : ObservableObject
 {
     private readonly ClientService _clientService = new();
@@ -141,10 +137,6 @@ public partial class ClientListViewModel : ObservableObject
         AdressePostale = string.Empty;
     }
 
-    /// <summary>
-    /// Génère 10 clients fictifs depuis l'API randomuser.me et les insère en
-    /// base (voir ClientApiService pour la veille). Ignore les emails déjà présents.
-    /// </summary>
     [RelayCommand]
     private async Task ImporterDepuisApiAsync()
     {

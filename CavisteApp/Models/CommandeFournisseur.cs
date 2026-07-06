@@ -9,11 +9,6 @@ public enum StatutCommande
     Receptionnee
 }
 
-/// <summary>
-/// Commande passée auprès d'un fournisseur suite à une alerte de stock bas.
-/// Le passage au statut <see cref="StatutCommande.Receptionnee"/> incrémente
-/// le stock des vins concernés (cf. StockService).
-/// </summary>
 public class CommandeFournisseur
 {
     [Key]
@@ -30,10 +25,6 @@ public class CommandeFournisseur
     public ICollection<LigneCommandeFournisseur> Lignes { get; set; } = new List<LigneCommandeFournisseur>();
 }
 
-/// <summary>
-/// Ligne de détail d'une commande fournisseur : quantité commandée pour un vin
-/// donné, et quantité effectivement reçue (peut différer en cas de livraison partielle).
-/// </summary>
 public class LigneCommandeFournisseur
 {
     [Key]

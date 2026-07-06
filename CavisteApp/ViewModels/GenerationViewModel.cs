@@ -6,11 +6,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CavisteApp.ViewModels;
 
-/// <summary>
-/// Page d'administration permettant de peupler rapidement l'application avec
-/// des données de test (stock, fournisseurs, clients, commandes, ventes).
-/// Réservée à l'administrateur (onglet masqué pour le Visiteur, cf. MainWindow.xaml).
-/// </summary>
 public partial class GenerationViewModel : ObservableObject
 {
     private readonly DonneesTestService _donneesTestService = new();
@@ -81,7 +76,6 @@ public partial class GenerationViewModel : ObservableObject
         });
     }
 
-    /// <summary>Enchaîne toutes les générations dans un ordre cohérent (stock avant ventes, etc.).</summary>
     [RelayCommand]
     private async Task GenererToutAsync()
     {

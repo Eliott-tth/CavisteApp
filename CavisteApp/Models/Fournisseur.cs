@@ -2,9 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CavisteApp.Models;
 
-/// <summary>
-/// Fournisseur de vin auprès duquel le caviste passe des commandes de réapprovisionnement.
-/// </summary>
 public class Fournisseur
 {
     [Key]

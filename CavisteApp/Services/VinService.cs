@@ -4,12 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// CRUD sur l'entité Vin réalisé via EF Core (ORM). Toute modification qui
-/// touche au stock déclenche automatiquement la vérification d'alerte. La
-/// "suppression" est une suppression douce (EstSupprime) pour ne jamais casser
-/// l'historique des ventes/commandes qui référencent déjà le vin.
-/// </summary>
 public class VinService
 {
     private readonly AlerteAutomatiqueService _alerteService = new();
@@ -48,11 +42,6 @@ public class VinService
         await _alerteService.VerifierApresModificationStockAsync(vin);
     }
 
-    /// <summary>
-    /// Retire le vin du catalogue. Si aucune vente/commande ne le référence,
-    /// il est vraiment effacé ; sinon (contrainte FOREIGN KEY), il est
-    /// simplement masqué (EstSupprime = true) pour préserver l'historique.
-    /// </summary>
     public async Task SupprimerAsync(int id)
     {
         using var db = new CavisteDbContext();
@@ -72,7 +61,6 @@ public class VinService
         }
     }
 
-    /// <summary>Ajuste le stock d'un vin (utilisé par la vente et la réception de commande).</summary>
     public async Task AjusterStockAsync(int vinId, int quantiteDelta)
     {
         using var db = new CavisteDbContext();
@@ -85,7 +73,6 @@ public class VinService
         }
     }
 
-    /// <summary>Retourne les vins actuellement sous leur seuil de stock bas.</summary>
     public async Task<List<Vin>> ListerVinsEnAlerteAsync()
     {
         using var db = new CavisteDbContext();

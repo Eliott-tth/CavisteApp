@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CavisteApp.Services;
 
-/// <summary>Résultat d'une opération d'authentification (succès/échec + message à afficher).</summary>
 public class ResultatConnexion
 {
     public bool Succes { get; set; }
@@ -16,11 +15,6 @@ public class ResultatConnexion
     public Utilisateur? Utilisateur { get; set; }
 }
 
-/// <summary>
-/// Gère les comptes utilisateurs : inscription avec confirmation par email,
-/// connexion, réinitialisation de mot de passe par email, et gestion des
-/// rôles par l'administrateur.
-/// </summary>
 public class UtilisateurService
 {
     private readonly EmailService _emailService = new();
@@ -32,7 +26,6 @@ public class UtilisateurService
         return await db.Utilisateurs.OrderBy(u => u.Email).ToListAsync();
     }
 
-    /// <summary>Crée un compte (rôle Visiteur par défaut) et envoie un code de confirmation par email.</summary>
     public async Task<ResultatConnexion> InscrireAsync(string email, string motDePasse)
     {
         using var db = new CavisteDbContext();
@@ -167,12 +160,6 @@ public class UtilisateurService
 
     private string GenererCode() => _random.Next(100000, 999999).ToString();
 
-    /// <summary>
-    /// Crée un compte administrateur par défaut (admin@caviste.fr / Admin123!)
-    /// si aucun administrateur n'existe encore en base. Appelée une fois au
-    /// démarrage de l'application pour éviter de rester bloqué sans accès admin
-    /// (le compte est créé déjà confirmé, sans passer par l'email).
-    /// </summary>
     public async Task AssurerAdminParDefautAsync()
     {
         using var db = new CavisteDbContext();

@@ -4,10 +4,6 @@ using System.Windows.Media;
 
 namespace CavisteApp.Converters;
 
-/// <summary>
-/// Convertit un booléen (ex : Vin.EstEnAlerte) en Brush : rouge si vrai, vert sinon.
-/// Utilisé pour le voyant visuel de stock bas dans les grilles.
-/// </summary>
 public class BoolToAlertBrushConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -7,11 +7,6 @@ using MimeKit;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Envoie tous les emails de l'application (alerte de stock bas, confirmation
-/// de compte, réinitialisation de mot de passe). Les paramètres SMTP sont lus
-/// depuis appsettings.json (voir appsettings.example.json).
-/// </summary>
 public class EmailService
 {
     private readonly SmtpOptions _options;
@@ -25,11 +20,6 @@ public class EmailService
         !string.IsNullOrWhiteSpace(_options.Host) &&
         !string.IsNullOrWhiteSpace(_options.EmailAdministrateur);
 
-    /// <summary>
-    /// Alerte automatique envoyée dès qu'un vin passe sous son seuil de stock
-    /// bas (appelée automatiquement par AlerteAutomatiqueService, sans action
-    /// manuelle du caviste).
-    /// </summary>
     public async Task EnvoyerAlerteStockBasAsync(Vin vin)
     {
         var corps = $"""

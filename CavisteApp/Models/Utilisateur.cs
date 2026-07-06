@@ -9,11 +9,6 @@ public enum RoleUtilisateur
     Administrateur
 }
 
-/// <summary>
-/// Compte utilisateur de l'application : identifiant = email, mot de passe
-/// haché, rôle (Visiteur/Administrateur), et informations nécessaires à la
-/// confirmation de compte et à la réinitialisation du mot de passe par email.
-/// </summary>
 public class Utilisateur
 {
     [Key]

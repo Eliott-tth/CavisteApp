@@ -4,10 +4,6 @@ using System.Text.Json;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Paramètres SMTP nécessaires à l'envoi des alertes de stock bas.
-/// À renseigner dans appsettings.json (voir SmtpOptions.LoadFromFile).
-/// </summary>
 public class SmtpOptions
 {
     public string Host { get; set; } = string.Empty;

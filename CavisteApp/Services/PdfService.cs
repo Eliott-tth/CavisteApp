@@ -7,11 +7,6 @@ using QuestPDF.Infrastructure;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Génère le ticket de caisse PDF après une vente, avec nom du client, liste des
-/// vins achetés (quantités, prix) et montant total, conformément au cahier des
-/// charges. Utilise QuestPDF (licence Community, configurée dans App.xaml.cs).
-/// </summary>
 public class PdfService
 {
     private readonly string _dossierTickets =

@@ -6,12 +6,6 @@ using CavisteApp.Models;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Génère des jeux de données de test pour peupler rapidement l'application
-/// (démonstration, développement). Les clients sont générés séparément via
-/// <see cref="ClientApiService"/> (randomuser.me) ; ce service couvre le reste :
-/// fournisseurs, randomisation du stock, commandes fournisseur, ventes.
-/// </summary>
 public class DonneesTestService
 {
     private readonly VinService _vinService = new();
@@ -27,7 +21,6 @@ public class DonneesTestService
     private static readonly string[] Rues = { "Rue des Vignes", "Chemin du Pressoir", "Avenue des Coteaux", "Route des Vendanges", "Rue de la Cave" };
     private static readonly string[] Villes = { "Beaune", "Bordeaux", "Avignon", "Reims", "Colmar", "Montpellier", "Angers" };
 
-    /// <summary>Génère des fournisseurs fictifs (noms/adresses/emails plausibles, sans API externe).</summary>
     public async Task<int> GenererFournisseursAsync(int nombre)
     {
         var cree = 0;
@@ -52,10 +45,6 @@ public class DonneesTestService
         return cree;
     }
 
-    /// <summary>
-    /// Réaffecte un stock aléatoire à chaque vin : ~30% restent sous leur seuil
-    /// (pour garder des alertes visibles en démonstration), le reste au-dessus.
-    /// </summary>
     public async Task<int> RandomiserStockAsync()
     {
         var vins = await _vinService.ListerAsync();
@@ -70,7 +59,6 @@ public class DonneesTestService
         return vins.Count;
     }
 
-    /// <summary>Crée des commandes fournisseur aléatoires pour des vins ayant un fournisseur associé.</summary>
     public async Task<int> GenererCommandesAsync(int nombre)
     {
         var vins = (await _vinService.ListerAsync()).Where(v => v.FournisseurId is not null).ToList();
@@ -89,7 +77,6 @@ public class DonneesTestService
         return cree;
     }
 
-    /// <summary>Crée des ventes aléatoires (client + 1 à 3 vins en stock) sans jamais dépasser le stock disponible.</summary>
     public async Task<int> GenererVentesAsync(int nombre)
     {
         var clients = await _clientService.ListerAsync();
@@ -116,7 +103,7 @@ public class DonneesTestService
             }
             catch (InvalidOperationException)
             {
-                // Stock devenu insuffisant entre-temps (deux vins choisis se recoupent) : on ignore cette itération.
+
             }
         }
         return cree;

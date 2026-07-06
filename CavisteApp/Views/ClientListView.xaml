@@ -14,7 +14,6 @@
             <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Liste des clients -->
         <DockPanel Grid.Column="0" Margin="0,0,12,0">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8"
                         IsEnabled="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur}">
@@ -39,7 +38,6 @@
             </DataGrid>
         </DockPanel>
 
-        <!-- Formulaire d'édition -->
         <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Padding="16" CornerRadius="4"
                 IsEnabled="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur}">
             <StackPanel>

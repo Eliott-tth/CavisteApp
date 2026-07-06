@@ -3,11 +3,6 @@ using System.Security.Cryptography;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Hache et vérifie les mots de passe avec PBKDF2 (sel aléatoire par
-/// utilisateur, 100 000 itérations SHA-256) : jamais de mot de passe en clair
-/// en base de données.
-/// </summary>
 public static class PasswordHasher
 {
     private const int TailleSel = 16;

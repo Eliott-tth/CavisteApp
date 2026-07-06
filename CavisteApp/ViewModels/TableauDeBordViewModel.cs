@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CavisteApp.ViewModels;
 
-/// <summary>Page d'accueil : indicateurs clés, alertes de stock bas et ventes récentes.</summary>
 public partial class TableauDeBordViewModel : ObservableObject
 {
     private readonly VinService _vinService = new();

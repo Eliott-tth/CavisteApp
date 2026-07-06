@@ -9,10 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CavisteApp.ViewModels;
 
-/// <summary>
-/// Regroupe la vue "Alertes" (vins sous leur seuil, envoi d'email, création de
-/// commande) et le suivi des commandes fournisseur (validation, réception).
-/// </summary>
 public partial class AlerteCommandeViewModel : ObservableObject
 {
     private readonly VinService _vinService = new();
@@ -48,12 +44,6 @@ public partial class AlerteCommandeViewModel : ObservableObject
         Commandes = new ObservableCollection<CommandeFournisseur>(commandesExistantes);
     }
 
-    /// <summary>
-    /// Crée une commande fournisseur pour reconstituer le stock du vin
-    /// jusqu'au double de son seuil (règle simple et modifiable). Utilise le
-    /// fournisseur associé au vin ; échoue proprement si aucun fournisseur
-    /// n'est renseigné sur la fiche vin.
-    /// </summary>
     [RelayCommand]
     private async Task CommanderAsync(Vin? vin)
     {
@@ -80,7 +70,6 @@ public partial class AlerteCommandeViewModel : ObservableObject
         }
     }
 
-    /// <summary>Envoie l'email d'alerte pour un vin sous son seuil (voir EmailService).</summary>
     [RelayCommand]
     private async Task EnvoyerAlerteEmailAsync(Vin? vin)
     {
@@ -114,10 +103,6 @@ public partial class AlerteCommandeViewModel : ObservableObject
         }
     }
 
-    /// <summary>
-    /// Réceptionne intégralement la commande (quantité reçue = quantité
-    /// commandée pour chaque ligne). Incrémente le stock des vins concernés.
-    /// </summary>
     [RelayCommand]
     private async Task ReceptionnerCommandeAsync(CommandeFournisseur? commande)
     {

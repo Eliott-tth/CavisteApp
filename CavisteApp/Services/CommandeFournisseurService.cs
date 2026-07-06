@@ -8,11 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Gère le cycle de vie d'une commande fournisseur : création (suite à une
-/// alerte de stock bas), validation, puis réception (qui incrémente le stock
-/// des vins concernés). Réalisé via EF Core.
-/// </summary>
 public class CommandeFournisseurService
 {
     public async Task<List<CommandeFournisseur>> ListerAsync()
@@ -25,7 +20,6 @@ public class CommandeFournisseurService
             .ToListAsync();
     }
 
-    /// <summary>Crée une commande "En attente" pour un fournisseur avec une ou plusieurs lignes (vin, quantité).</summary>
     public async Task<CommandeFournisseur> CreerCommandeAsync(int fournisseurId, List<(int VinId, int Quantite)> lignes)
     {
         using var db = new CavisteDbContext();
@@ -47,7 +41,6 @@ public class CommandeFournisseurService
         return commande;
     }
 
-    /// <summary>Valide une commande en attente : l'indicateur d'alerte associé disparaît côté UI.</summary>
     public async Task ValiderAsync(int commandeId)
     {
         using var db = new CavisteDbContext();
@@ -59,11 +52,6 @@ public class CommandeFournisseurService
         }
     }
 
-    /// <summary>
-    /// Réceptionne une commande validée : incrémente le stock de chaque vin
-    /// selon la quantité reçue (peut différer de la quantité commandée en cas
-    /// de livraison partielle) et passe la commande au statut "Receptionnee".
-    /// </summary>
     public async Task ReceptionnerAsync(int commandeId, Dictionary<int, int> quantitesRecuesParLigne)
     {
         using var db = new CavisteDbContext();
@@ -84,6 +72,15 @@ public class CommandeFournisseurService
         commande.DateReception = DateTime.Now;
 
         await db.SaveChangesAsync();
+    }
+
+    public async Task<bool> CommandeEnCoursExistePourVinAsync(int vinId)
+    {
+        using var db = new CavisteDbContext();
+        return await db.CommandesFournisseur
+            .Where(c => c.Statut != StatutCommande.Receptionnee)
+            .SelectMany(c => c.Lignes)
+            .AnyAsync(l => l.VinId == vinId);
     }
 
     public async Task SupprimerAsync(int commandeId)

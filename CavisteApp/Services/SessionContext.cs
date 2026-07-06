@@ -3,11 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CavisteApp.Services;
 
-/// <summary>
-/// Contexte de session partagé par toute l'application : porte l'utilisateur
-/// actuellement connecté. Les vues se lient à <see cref="Instance"/> pour
-/// activer/désactiver leurs actions selon le rôle (contrôle d'accès par rôle).
-/// </summary>
 public partial class SessionContext : ObservableObject
 {
     public static SessionContext Instance { get; } = new();

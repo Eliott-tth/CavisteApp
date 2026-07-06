@@ -7,10 +7,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CavisteApp.ViewModels;
 
-/// <summary>
-/// Gère la liste des vins, le formulaire d'édition et l'import depuis l'API
-/// distante. Le CRUD passe par <see cref="VinService"/> (EF Core / ORM).
-/// </summary>
 public partial class VinListViewModel : ObservableObject
 {
     private readonly VinService _vinService = new();
@@ -26,7 +22,6 @@ public partial class VinListViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<Fournisseur> fournisseursDisponibles = new();
 
-    // --- Champs du formulaire (édition / création) ---
     [ObservableProperty] private int vinId;
     [ObservableProperty] private string nom = string.Empty;
     [ObservableProperty] private TypeVin typeSelectionne = TypeVin.Rouge;
@@ -52,8 +47,6 @@ public partial class VinListViewModel : ObservableObject
         await ChargerAsync();
     }
 
-    /// <summary>Recharge la liste des fournisseurs (ex : au moment d'ouvrir le ComboBox), utile car cette
-    /// vue est instanciée une seule fois au démarrage et peut donc avoir une liste obsolète.</summary>
     public async Task RafraichirFournisseursAsync()
     {
         var fournisseurIdActuel = FournisseurSelectionne?.Id;
@@ -143,8 +136,7 @@ public partial class VinListViewModel : ObservableObject
             }
 
             await ChargerAsync();
-            // Resélectionne le vin fraîchement rechargé depuis la base : si le formulaire
-            // affiche bien les valeurs attendues, c'est la preuve que la sauvegarde a réussi.
+
             VinSelectionne = Vins.FirstOrDefault(v => v.Id == idSauvegarde);
         }
         catch (Exception ex)
@@ -171,10 +163,6 @@ public partial class VinListViewModel : ObservableObject
         }
     }
 
-    /// <summary>
-    /// Importe une vingtaine de vins de la catégorie sélectionnée depuis
-    /// l'API distante et les insère en base (voir WineApiService pour la veille).
-    /// </summary>
     [RelayCommand]
     private async Task ImporterDepuisApiAsync()
     {

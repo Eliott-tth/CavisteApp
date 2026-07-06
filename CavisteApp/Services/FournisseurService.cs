@@ -1,12 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using CavisteApp.Data;
 using CavisteApp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CavisteApp.Services;
 
-/// <summary>CRUD sur l'entité Fournisseur, réalisé via EF Core (ORM).</summary>
 public class FournisseurService
 {
+    private readonly Random _random = new();
+
     public async Task<List<Fournisseur>> ListerAsync()
     {
         using var db = new CavisteDbContext();
@@ -18,6 +23,20 @@ public class FournisseurService
         using var db = new CavisteDbContext();
         db.Fournisseurs.Add(fournisseur);
         await db.SaveChangesAsync();
+
+        var candidats = await db.Vins.Where(v => !v.EstSupprime && v.FournisseurId == null).ToListAsync();
+        if (candidats.Count == 0)
+            candidats = await db.Vins.Where(v => !v.EstSupprime).ToListAsync();
+
+        if (candidats.Count > 0)
+        {
+            var nombre = _random.Next(3, Math.Min(9, candidats.Count) + 1);
+            var choisis = candidats.OrderBy(v => _random.Next()).Take(nombre).ToList();
+            foreach (var vin in choisis)
+                vin.FournisseurId = fournisseur.Id;
+            await db.SaveChangesAsync();
+        }
+
         return fournisseur;
     }
 

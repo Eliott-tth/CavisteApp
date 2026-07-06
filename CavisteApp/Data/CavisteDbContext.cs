@@ -5,10 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CavisteApp.Data;
 
-/// <summary>
-/// Contexte EF Core de l'application. Utilise SQLite en fichier local
-/// (caviste.db, créé automatiquement à côté de l'exécutable).
-/// </summary>
 public class CavisteDbContext : DbContext
 {
     public DbSet<Vin> Vins => Set<Vin>();
@@ -23,27 +19,24 @@ public class CavisteDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(DbConnectionHelper.ConnectionString);
-        // Décommenter pendant le développement pour voir les requêtes SQL générées :
-        // optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // --- Vin / Fournisseur (1-N) ---
+
         modelBuilder.Entity<Vin>()
             .HasOne(v => v.Fournisseur)
             .WithMany(f => f.Vins)
             .HasForeignKey(v => v.FournisseurId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // --- Vente / Client (N-1) ---
         modelBuilder.Entity<Vente>()
             .HasOne(v => v.Client)
             .WithMany(c => c.Ventes)
             .HasForeignKey(v => v.ClientId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --- LigneVente : dépend de Vente ET de Vin ---
         modelBuilder.Entity<LigneVente>()
             .HasOne(l => l.Vente)
             .WithMany(v => v.Lignes)
@@ -56,14 +49,12 @@ public class CavisteDbContext : DbContext
             .HasForeignKey(l => l.VinId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --- CommandeFournisseur / Fournisseur (N-1) ---
         modelBuilder.Entity<CommandeFournisseur>()
             .HasOne(c => c.Fournisseur)
             .WithMany(f => f.Commandes)
             .HasForeignKey(c => c.FournisseurId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --- LigneCommandeFournisseur : dépend de CommandeFournisseur ET de Vin ---
         modelBuilder.Entity<LigneCommandeFournisseur>()
             .HasOne(l => l.CommandeFournisseur)
             .WithMany(c => c.Lignes)

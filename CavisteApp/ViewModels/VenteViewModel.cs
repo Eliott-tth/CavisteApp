@@ -11,7 +11,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CavisteApp.ViewModels;
 
-/// <summary>Une ligne du panier en cours de constitution (pas encore une vente persistée).</summary>
 public partial class LignePanier : ObservableObject
 {
     public Vin Vin { get; }
@@ -30,11 +29,6 @@ public partial class LignePanier : ObservableObject
     partial void OnQuantiteChanged(int value) => OnPropertyChanged(nameof(SousTotal));
 }
 
-/// <summary>
-/// Gère l'écran de caisse : sélection du client, ajout de vins au panier,
-/// validation de la vente (décrémente le stock via VenteService) et génération
-/// du ticket PDF (PdfService).
-/// </summary>
 public partial class VenteViewModel : ObservableObject
 {
     private readonly VinService _vinService = new();

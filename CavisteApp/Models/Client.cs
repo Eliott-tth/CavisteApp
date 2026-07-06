@@ -2,9 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CavisteApp.Models;
 
-/// <summary>
-/// Client du caviste, enregistré lors d'une vente pour l'édition du ticket de caisse.
-/// </summary>
 public class Client
 {
     [Key]
