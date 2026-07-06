@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:CavisteApp.ViewModels"
-             xmlns:conv="clr-namespace:CavisteApp.Converters">
+             xmlns:conv="clr-namespace:CavisteApp.Converters"
+             xmlns:services="clr-namespace:CavisteApp.Services">
 
     <UserControl.Resources>
         <conv:BoolToAlertBrushConverter x:Key="AlertBrushConverter"/>
@@ -21,7 +22,8 @@
 
         <!-- Liste des vins -->
         <DockPanel Grid.Column="0" Margin="0,0,12,0">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8"
+                        IsEnabled="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur}">
                 <TextBlock Text="Stock de vins" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
                 <Button Content="Nouveau" Command="{Binding NouveauCommand}" Margin="16,0,0,0" Padding="10,4"/>
                 <Button Content="Importer depuis l'API" Command="{Binding ImporterDepuisApiCommand}"
@@ -60,6 +62,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Photo" Width="55">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding ImageUrl}" Height="40" Width="30"
+                                       Stretch="Uniform" Margin="2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" Width="*"/>
                     <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="90"/>
                     <DataGridTextColumn Header="Prix (€)" Binding="{Binding Prix, StringFormat={}{0:N2}}" Width="90"/>
@@ -70,9 +80,13 @@
         </DockPanel>
 
         <!-- Formulaire d'édition -->
-        <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Padding="16" CornerRadius="4">
+        <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Padding="16" CornerRadius="4"
+                IsEnabled="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur}">
             <StackPanel>
                 <TextBlock Text="Fiche vin" FontSize="16" FontWeight="Bold" Margin="0,0,0,12"/>
+
+                <Image Source="{Binding ImageUrl}" Height="120" Stretch="Uniform"
+                       HorizontalAlignment="Center" Margin="0,0,0,12"/>
 
                 <TextBlock Text="Nom"/>
                 <TextBox Text="{Binding Nom, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,10"/>

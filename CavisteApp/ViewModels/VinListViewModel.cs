@@ -34,6 +34,7 @@ public partial class VinListViewModel : ObservableObject
     [ObservableProperty] private int stock;
     [ObservableProperty] private int seuilBas = 5;
     [ObservableProperty] private Fournisseur? fournisseurSelectionne;
+    [ObservableProperty] private string? imageUrl;
 
     [ObservableProperty] private string messageStatut = string.Empty;
     [ObservableProperty] private bool importEnCours;
@@ -77,6 +78,7 @@ public partial class VinListViewModel : ObservableObject
         Stock = value.Stock;
         SeuilBas = value.SeuilBas;
         FournisseurSelectionne = FournisseursDisponibles.FirstOrDefault(f => f.Id == value.FournisseurId);
+        ImageUrl = value.ImageUrl;
     }
 
     [RelayCommand]
@@ -104,6 +106,8 @@ public partial class VinListViewModel : ObservableObject
 
         try
         {
+            int idSauvegarde;
+
             if (VinId == 0)
             {
                 var nouveau = new Vin
@@ -113,9 +117,11 @@ public partial class VinListViewModel : ObservableObject
                     Prix = Prix,
                     Stock = Stock,
                     SeuilBas = SeuilBas,
-                    FournisseurId = FournisseurSelectionne?.Id
+                    FournisseurId = FournisseurSelectionne?.Id,
+                    ImageUrl = ImageUrl
                 };
-                await _vinService.AjouterAsync(nouveau);
+                var ajoute = await _vinService.AjouterAsync(nouveau);
+                idSauvegarde = ajoute.Id;
                 MessageStatut = $"Vin '{Nom}' ajouté.";
             }
             else
@@ -128,14 +134,18 @@ public partial class VinListViewModel : ObservableObject
                     Prix = Prix,
                     Stock = Stock,
                     SeuilBas = SeuilBas,
-                    FournisseurId = FournisseurSelectionne?.Id
+                    FournisseurId = FournisseurSelectionne?.Id,
+                    ImageUrl = ImageUrl
                 };
                 await _vinService.ModifierAsync(modifie);
+                idSauvegarde = VinId;
                 MessageStatut = $"Vin '{Nom}' modifié.";
             }
 
             await ChargerAsync();
-            Nouveau();
+            // Resélectionne le vin fraîchement rechargé depuis la base : si le formulaire
+            // affiche bien les valeurs attendues, c'est la preuve que la sauvegarde a réussi.
+            VinSelectionne = Vins.FirstOrDefault(v => v.Id == idSauvegarde);
         }
         catch (Exception ex)
         {
@@ -206,5 +216,6 @@ public partial class VinListViewModel : ObservableObject
         Stock = 0;
         SeuilBas = 5;
         FournisseurSelectionne = null;
+        ImageUrl = null;
     }
 }

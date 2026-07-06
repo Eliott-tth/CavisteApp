@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using CavisteApp.Models;
 using CavisteApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -66,21 +67,25 @@ public partial class FournisseurListViewModel : ObservableObject
 
         try
         {
+            int idSauvegarde;
+
             if (FournisseurId == 0)
             {
                 var nouveau = new Fournisseur { Nom = Nom, Email = Email, Telephone = Telephone, Adresse = Adresse };
-                await _fournisseurService.AjouterAsync(nouveau);
+                var ajoute = await _fournisseurService.AjouterAsync(nouveau);
+                idSauvegarde = ajoute.Id;
                 MessageStatut = $"Fournisseur '{Nom}' ajouté.";
             }
             else
             {
                 var modifie = new Fournisseur { Id = FournisseurId, Nom = Nom, Email = Email, Telephone = Telephone, Adresse = Adresse };
                 await _fournisseurService.ModifierAsync(modifie);
+                idSauvegarde = FournisseurId;
                 MessageStatut = $"Fournisseur '{Nom}' modifié.";
             }
 
             await ChargerAsync();
-            Nouveau();
+            FournisseurSelectionne = Fournisseurs.FirstOrDefault(f => f.Id == idSauvegarde);
         }
         catch (Exception ex)
         {

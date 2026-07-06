@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using CavisteApp.Models;
 using CavisteApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,6 +14,7 @@ namespace CavisteApp.ViewModels;
 public partial class ClientListViewModel : ObservableObject
 {
     private readonly ClientService _clientService = new();
+    private readonly ClientApiService _clientApiService = new();
 
     [ObservableProperty]
     private ObservableCollection<Client> clients = new();
@@ -27,6 +29,7 @@ public partial class ClientListViewModel : ObservableObject
     [ObservableProperty] private string adressePostale = string.Empty;
 
     [ObservableProperty] private string messageStatut = string.Empty;
+    [ObservableProperty] private bool importEnCours;
 
     public ClientListViewModel()
     {
@@ -73,6 +76,8 @@ public partial class ClientListViewModel : ObservableObject
 
         try
         {
+            int idSauvegarde;
+
             if (ClientId == 0)
             {
                 var nouveau = new Client
@@ -82,7 +87,7 @@ public partial class ClientListViewModel : ObservableObject
                     Email = Email,
                     AdressePostale = AdressePostale
                 };
-                await _clientService.AjouterAsync(nouveau);
+                idSauvegarde = await _clientService.AjouterAsync(nouveau);
                 MessageStatut = $"Client '{nouveau.NomComplet}' ajouté.";
             }
             else
@@ -96,11 +101,12 @@ public partial class ClientListViewModel : ObservableObject
                     AdressePostale = AdressePostale
                 };
                 await _clientService.ModifierAsync(modifie);
+                idSauvegarde = ClientId;
                 MessageStatut = $"Client '{modifie.NomComplet}' modifié.";
             }
 
             await ChargerAsync();
-            Nouveau();
+            ClientSelectionne = Clients.FirstOrDefault(c => c.Id == idSauvegarde);
         }
         catch (Exception ex)
         {
@@ -134,5 +140,41 @@ public partial class ClientListViewModel : ObservableObject
         Email = string.Empty;
         AdressePostale = string.Empty;
     }
+
+    /// <summary>
+    /// Génère 10 clients fictifs depuis l'API randomuser.me et les insère en
+    /// base (voir ClientApiService pour la veille). Ignore les emails déjà présents.
+    /// </summary>
+    [RelayCommand]
+    private async Task ImporterDepuisApiAsync()
+    {
+        try
+        {
+            ImportEnCours = true;
+            MessageStatut = "Génération de clients en cours...";
+
+            var clientsGeneres = await _clientApiService.GenererClientsAsync(10);
+
+            var emailsExistants = Clients.Select(c => c.Email).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var clientsNouveaux = clientsGeneres.Where(c => !emailsExistants.Contains(c.Email)).ToList();
+
+            foreach (var client in clientsNouveaux)
+                await _clientService.AjouterAsync(client);
+
+            var ignores = clientsGeneres.Count - clientsNouveaux.Count;
+            MessageStatut = ignores > 0
+                ? $"{clientsNouveaux.Count} client(s) généré(s), {ignores} déjà présent(s) ignoré(s)."
+                : $"{clientsNouveaux.Count} client(s) généré(s) depuis l'API.";
+
+            await ChargerAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageStatut = $"Échec de la génération : {ex.InnerException?.Message ?? ex.Message}";
+        }
+        finally
+        {
+            ImportEnCours = false;
+        }
+    }
 }
-//

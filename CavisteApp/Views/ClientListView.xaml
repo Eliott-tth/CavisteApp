@@ -1,7 +1,8 @@
 <UserControl x:Class="CavisteApp.Views.ClientListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:CavisteApp.ViewModels">
+             xmlns:vm="clr-namespace:CavisteApp.ViewModels"
+             xmlns:services="clr-namespace:CavisteApp.Services">
 
     <UserControl.DataContext>
         <vm:ClientListViewModel/>
@@ -15,9 +16,12 @@
 
         <!-- Liste des clients -->
         <DockPanel Grid.Column="0" Margin="0,0,12,0">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8"
+                        IsEnabled="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur}">
                 <TextBlock Text="Clients" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
                 <Button Content="Nouveau" Command="{Binding NouveauCommand}" Margin="16,0,0,0" Padding="10,4"/>
+                <Button Content="Générer depuis l'API" Command="{Binding ImporterDepuisApiCommand}"
+                        Margin="8,0,0,0" Padding="10,4"/>
             </StackPanel>
 
             <TextBlock DockPanel.Dock="Bottom" Text="{Binding MessageStatut}" Margin="0,8,0,0" Foreground="DimGray"/>
@@ -35,7 +39,8 @@
         </DockPanel>
 
         <!-- Formulaire d'édition -->
-        <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Padding="16" CornerRadius="4">
+        <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Padding="16" CornerRadius="4"
+                IsEnabled="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur}">
             <StackPanel>
                 <TextBlock Text="Fiche client" FontSize="16" FontWeight="Bold" Margin="0,0,0,12"/>
 

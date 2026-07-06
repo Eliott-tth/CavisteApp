@@ -34,6 +34,9 @@ public class Vin
     /// <summary>Provenance du vin lorsqu'il a été importé depuis l'API distante (nullable pour les vins saisis manuellement).</summary>
     public string? Origine { get; set; }
 
+    /// <summary>URL de la photo de la bouteille (fournie par l'API distante lors de l'import).</summary>
+    public string? ImageUrl { get; set; }
+
     /// <summary>Indique si le vin est actuellement sous son seuil de stock bas.</summary>
     [NotMapped]
     public bool EstEnAlerte => Stock <= SeuilBas;

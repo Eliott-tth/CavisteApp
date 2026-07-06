@@ -13,6 +13,7 @@ public class WineApiDto
     public string? Winery { get; set; }
     public string? Wine { get; set; }
     public string? Location { get; set; }
+    public string? Image { get; set; }
     public int Id { get; set; }
 }
 
@@ -73,7 +74,8 @@ public class WineApiService
                 Prix = GenererPrixIndicatif(),
                 Stock = 0,
                 SeuilBas = 5,
-                Origine = "Import API sampleapis.com"
+                Origine = "Import API sampleapis.com",
+                ImageUrl = w.Image
             })
             .ToList();
     }
