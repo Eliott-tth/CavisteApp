@@ -37,6 +37,13 @@ public class Vin
     /// <summary>URL de la photo de la bouteille (fournie par l'API distante lors de l'import).</summary>
     public string? ImageUrl { get; set; }
 
+    /// <summary>
+    /// Suppression douce : quand le caviste "supprime" un vin déjà présent dans
+    /// une vente ou une commande fournisseur, on ne peut pas l'effacer de la base
+    /// (ça casserait l'historique) — on le masque simplement du catalogue.
+    /// </summary>
+    public bool EstSupprime { get; set; }
+
     /// <summary>Indique si le vin est actuellement sous son seuil de stock bas.</summary>
     [NotMapped]
     public bool EstEnAlerte => Stock <= SeuilBas;

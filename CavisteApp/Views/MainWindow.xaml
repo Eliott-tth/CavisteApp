@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:CavisteApp.Views"
         xmlns:services="clr-namespace:CavisteApp.Services"
-        Title="Caviste - Logiciel de caisse" Height="700" Width="1100"
-        WindowStartupLocation="CenterScreen">
+        Title="Cave du Sommelier" Height="760" Width="1280"
+        WindowStartupLocation="CenterScreen" Background="#F7F1EE">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -16,31 +16,65 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="#2C2A28" Height="48">
-            <TextBlock Text="Caviste"
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="#5C1220" Height="52">
+            <TextBlock Text="Cave du Sommelier"
                        Foreground="White" FontSize="18" FontWeight="Bold"
-                       VerticalAlignment="Center" Margin="16,0"/>
+                       VerticalAlignment="Center" Margin="20,0"/>
             <TextBlock Text="{Binding Source={x:Static services:SessionContext.Instance}, Path=RoleAffiche, StringFormat='Connecté en tant que : {0}'}"
-                       Foreground="LightGray" FontSize="12" VerticalAlignment="Center" Margin="24,0,0,0"/>
+                       Foreground="#E8C9CD" FontSize="12" VerticalAlignment="Center" Margin="24,0,0,0"/>
+            <TextBlock Text="{Binding Source={x:Static services:SessionContext.Instance}, Path=UtilisateurConnecte.Email}"
+                       Foreground="#E8C9CD" FontSize="12" VerticalAlignment="Center" Margin="12,0,0,0"/>
         </StackPanel>
 
-        <TabControl Grid.Row="1" Margin="12">
+        <TabControl x:Name="OngletsPrincipaux" Grid.Row="1" TabStripPlacement="Left">
+            <TabItem Header="Accueil">
+                <Border Padding="20">
+                    <views:AccueilView/>
+                </Border>
+            </TabItem>
+            <TabItem Header="Tableau de bord">
+                <Border Padding="20">
+                    <views:TableauDeBordView/>
+                </Border>
+            </TabItem>
             <TabItem Header="Vente">
-                <views:VenteView/>
+                <Border Padding="20">
+                    <views:VenteView/>
+                </Border>
             </TabItem>
             <TabItem Header="Stock">
-                <views:VinListView/>
+                <Border Padding="20">
+                    <views:VinListView/>
+                </Border>
             </TabItem>
             <TabItem Header="Clients">
-                <views:ClientListView/>
+                <Border Padding="20">
+                    <views:ClientListView/>
+                </Border>
             </TabItem>
             <TabItem Header="Fournisseurs"
                      Visibility="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur, Converter={StaticResource BoolToVis}}">
-                <views:FournisseurListView/>
+                <Border Padding="20">
+                    <views:FournisseurListView/>
+                </Border>
             </TabItem>
             <TabItem Header="Alertes &amp; Commandes"
                      Visibility="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur, Converter={StaticResource BoolToVis}}">
-                <views:AlerteCommandeView/>
+                <Border Padding="20">
+                    <views:AlerteCommandeView/>
+                </Border>
+            </TabItem>
+            <TabItem Header="Génération"
+                     Visibility="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur, Converter={StaticResource BoolToVis}}">
+                <Border Padding="20">
+                    <views:GenerationView/>
+                </Border>
+            </TabItem>
+            <TabItem Header="Utilisateurs"
+                     Visibility="{Binding Source={x:Static services:SessionContext.Instance}, Path=EstAdministrateur, Converter={StaticResource BoolToVis}}">
+                <Border Padding="20">
+                    <views:UtilisateurListView/>
+                </Border>
             </TabItem>
         </TabControl>
     </Grid>

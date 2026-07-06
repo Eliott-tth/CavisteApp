@@ -18,6 +18,7 @@ public class CavisteDbContext : DbContext
     public DbSet<LigneVente> LignesVente => Set<LigneVente>();
     public DbSet<CommandeFournisseur> CommandesFournisseur => Set<CommandeFournisseur>();
     public DbSet<LigneCommandeFournisseur> LignesCommandeFournisseur => Set<LigneCommandeFournisseur>();
+    public DbSet<Utilisateur> Utilisateurs => Set<Utilisateur>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

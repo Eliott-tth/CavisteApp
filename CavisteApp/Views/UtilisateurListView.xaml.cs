@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace CavisteApp.Views;
 
-public partial class FournisseurListView : UserControl
+public partial class UtilisateurListView : UserControl
 {
-    public FournisseurListView()
+    public UtilisateurListView()
     {
         InitializeComponent();
     }

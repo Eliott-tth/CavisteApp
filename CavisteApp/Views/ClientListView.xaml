@@ -22,6 +22,7 @@
                 <Button Content="Nouveau" Command="{Binding NouveauCommand}" Margin="16,0,0,0" Padding="10,4"/>
                 <Button Content="Générer depuis l'API" Command="{Binding ImporterDepuisApiCommand}"
                         Margin="8,0,0,0" Padding="10,4"/>
+                <Button Content="Rafraîchir" Command="{Binding ChargerCommand}" Margin="8,0,0,0" Padding="10,4"/>
             </StackPanel>
 
             <TextBlock DockPanel.Dock="Bottom" Text="{Binding MessageStatut}" Margin="0,8,0,0" Foreground="DimGray"/>

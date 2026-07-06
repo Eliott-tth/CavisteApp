@@ -156,6 +156,44 @@ namespace CavisteApp.Migrations
                     b.ToTable("LignesVente");
                 });
 
+            modelBuilder.Entity("CavisteApp.Models.Utilisateur", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CodeConfirmation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CodeReinitialisation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateExpirationCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EstConfirme")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MotDePasseHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Utilisateurs");
+                });
+
             modelBuilder.Entity("CavisteApp.Models.Vente", b =>
                 {
                     b.Property<int>("Id")
@@ -179,6 +217,9 @@ namespace CavisteApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EstSupprime")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("FournisseurId")

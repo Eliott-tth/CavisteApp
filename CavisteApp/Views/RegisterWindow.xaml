@@ -1,0 +1,32 @@
+<Window x:Class="CavisteApp.Views.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Créer un compte" Height="480" Width="420"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Background="#F7F1EE">
+    <StackPanel Margin="32" VerticalAlignment="Center">
+        <TextBlock Text="Créer un compte" FontSize="20" FontWeight="Bold"
+                   Foreground="#7A1F2B" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+        <StackPanel x:Name="PanelInscription">
+            <TextBlock Text="Email"/>
+            <TextBox x:Name="ChampEmail" Padding="6" Margin="0,4,0,14"/>
+
+            <TextBlock Text="Mot de passe"/>
+            <PasswordBox x:Name="ChampMotDePasse" Padding="6" Margin="0,4,0,14"/>
+
+            <Button Content="Créer le compte" Padding="10,8" Background="#7A1F2B" Foreground="White"
+                    BorderThickness="0" Click="BoutonInscrire_Click"/>
+        </StackPanel>
+
+        <StackPanel x:Name="PanelConfirmation" Visibility="Collapsed" Margin="0,10,0,0">
+            <TextBlock Text="Un code de confirmation a été envoyé par email." TextWrapping="Wrap" Margin="0,0,0,10"/>
+            <TextBlock Text="Code de confirmation"/>
+            <TextBox x:Name="ChampCode" Padding="6" Margin="0,4,0,14"/>
+            <Button Content="Confirmer le compte" Padding="10,8" Background="#7A1F2B" Foreground="White"
+                    BorderThickness="0" Click="BoutonConfirmer_Click"/>
+        </StackPanel>
+
+        <TextBlock x:Name="TexteMessage" Foreground="#333333" TextWrapping="Wrap" Margin="0,14,0,0"/>
+    </StackPanel>
+</Window>

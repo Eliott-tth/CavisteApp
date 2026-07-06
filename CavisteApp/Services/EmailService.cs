@@ -8,9 +8,9 @@ using MimeKit;
 namespace CavisteApp.Services;
 
 /// <summary>
-/// Envoie une alerte email à l'administrateur lorsqu'un vin passe sous son
-/// seuil de stock bas, conformément au cahier des charges. Les paramètres
-/// SMTP sont lus depuis appsettings.json (voir appsettings.example.json).
+/// Envoie tous les emails de l'application (alerte de stock bas, confirmation
+/// de compte, réinitialisation de mot de passe). Les paramètres SMTP sont lus
+/// depuis appsettings.json (voir appsettings.example.json).
 /// </summary>
 public class EmailService
 {
@@ -26,11 +26,52 @@ public class EmailService
         !string.IsNullOrWhiteSpace(_options.EmailAdministrateur);
 
     /// <summary>
-    /// Envoie une alerte pour un vin sous son seuil. Contient le nom du vin,
-    /// la quantité en stock, le seuil configuré, et l'indication qu'une
-    /// commande fournisseur est nécessaire (cf. cahier des charges).
+    /// Alerte automatique envoyée dès qu'un vin passe sous son seuil de stock
+    /// bas (appelée automatiquement par AlerteAutomatiqueService, sans action
+    /// manuelle du caviste).
     /// </summary>
     public async Task EnvoyerAlerteStockBasAsync(Vin vin)
+    {
+        var corps = $"""
+            Alerte de stock bas
+
+            Vin : {vin.Nom} ({vin.Type})
+            Stock actuel : {vin.Stock} bouteille(s)
+            Seuil configuré : {vin.SeuilBas} bouteille(s)
+
+            Une commande fournisseur est nécessaire pour réapprovisionner cette référence.
+            """;
+
+        await EnvoyerAsync(_options.EmailAdministrateur, $"[Caviste] Alerte stock bas : {vin.Nom}", corps);
+    }
+
+    public async Task EnvoyerCodeConfirmationAsync(string email, string code)
+    {
+        var corps = $"""
+            Bienvenue sur Cave du Sommelier !
+
+            Voici ton code de confirmation de compte : {code}
+
+            Ce code expire dans 30 minutes.
+            """;
+
+        await EnvoyerAsync(email, "Confirme ton compte - Cave du Sommelier", corps);
+    }
+
+    public async Task EnvoyerCodeReinitialisationAsync(string email, string code)
+    {
+        var corps = $"""
+            Tu as demandé la réinitialisation de ton mot de passe.
+
+            Voici ton code de réinitialisation : {code}
+
+            Ce code expire dans 30 minutes. Si tu n'es pas à l'origine de cette demande, ignore cet email.
+            """;
+
+        await EnvoyerAsync(email, "Réinitialisation de mot de passe - Cave du Sommelier", corps);
+    }
+
+    private async Task EnvoyerAsync(string destinataire, string sujet, string corps)
     {
         if (!EstConfigure)
             throw new InvalidOperationException(
@@ -38,21 +79,9 @@ public class EmailService
 
         var message = new MimeMessage();
         message.From.Add(MailboxAddress.Parse(_options.EmailExpediteur));
-        message.To.Add(MailboxAddress.Parse(_options.EmailAdministrateur));
-        message.Subject = $"[Caviste] Alerte stock bas : {vin.Nom}";
-
-        message.Body = new TextPart("plain")
-        {
-            Text = $"""
-                Alerte de stock bas
-
-                Vin : {vin.Nom} ({vin.Type})
-                Stock actuel : {vin.Stock} bouteille(s)
-                Seuil configuré : {vin.SeuilBas} bouteille(s)
-
-                Une commande fournisseur est nécessaire pour réapprovisionner cette référence.
-                """
-        };
+        message.To.Add(MailboxAddress.Parse(destinataire));
+        message.Subject = sujet;
+        message.Body = new TextPart("plain") { Text = corps };
 
         using var client = new SmtpClient();
         var securite = _options.UtiliserSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None;

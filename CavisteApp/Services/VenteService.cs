@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,10 +10,13 @@ namespace CavisteApp.Services;
 
 /// <summary>
 /// Gère la création des ventes : vérifie le stock disponible, décrémente le
-/// stock des vins vendus, et persiste la vente avec ses lignes (EF Core).
+/// stock des vins vendus, persiste la vente avec ses lignes (EF Core), et
+/// déclenche automatiquement l'alerte email si un vin passe sous son seuil.
 /// </summary>
 public class VenteService
 {
+    private readonly AlerteAutomatiqueService _alerteService = new();
+
     public async Task<List<Vente>> ListerAsync()
     {
         using var db = new CavisteDbContext();
@@ -41,6 +44,8 @@ public class VenteService
             Lignes = new List<LigneVente>()
         };
 
+        var vinsAffectes = new List<Vin>();
+
         foreach (var (vinId, quantite) in lignes)
         {
             var vin = await db.Vins.FindAsync(vinId);
@@ -51,6 +56,7 @@ public class VenteService
                     $"Stock insuffisant pour '{vin.Nom}' (disponible : {vin.Stock}, demandé : {quantite}).");
 
             vin.Stock -= quantite;
+            vinsAffectes.Add(vin);
             vente.Lignes.Add(new LigneVente
             {
                 VinId = vinId,
@@ -62,6 +68,9 @@ public class VenteService
         db.Ventes.Add(vente);
         await db.SaveChangesAsync();
         await transaction.CommitAsync();
+
+        foreach (var vin in vinsAffectes)
+            await _alerteService.VerifierApresModificationStockAsync(vin);
 
         return await db.Ventes
             .Include(v => v.Client)

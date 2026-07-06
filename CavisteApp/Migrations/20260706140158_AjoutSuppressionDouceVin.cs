@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CavisteApp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AjoutSuppressionDouceVin : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,26 @@ namespace CavisteApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fournisseurs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Utilisateurs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    MotDePasseHash = table.Column<string>(type: "TEXT", nullable: false),
+                    Role = table.Column<int>(type: "INTEGER", nullable: false),
+                    EstConfirme = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CodeConfirmation = table.Column<string>(type: "TEXT", nullable: true),
+                    CodeReinitialisation = table.Column<string>(type: "TEXT", nullable: true),
+                    DateExpirationCode = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DateCreation = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Utilisateurs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,7 +117,9 @@ namespace CavisteApp.Migrations
                     Stock = table.Column<int>(type: "INTEGER", nullable: false),
                     SeuilBas = table.Column<int>(type: "INTEGER", nullable: false),
                     FournisseurId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Origine = table.Column<string>(type: "TEXT", nullable: true)
+                    Origine = table.Column<string>(type: "TEXT", nullable: true),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: true),
+                    EstSupprime = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -210,6 +232,9 @@ namespace CavisteApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "LignesVente");
+
+            migrationBuilder.DropTable(
+                name: "Utilisateurs");
 
             migrationBuilder.DropTable(
                 name: "CommandesFournisseur");

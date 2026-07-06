@@ -8,6 +8,7 @@
     <UserControl.Resources>
         <conv:BoolToAlertBrushConverter x:Key="AlertBrushConverter"/>
         <conv:InverseBooleanConverter x:Key="InverseBoolConverter"/>
+        <conv:BoolToStatutStockConverter x:Key="StatutConverter"/>
     </UserControl.Resources>
 
     <UserControl.DataContext>
@@ -28,6 +29,7 @@
                 <Button Content="Nouveau" Command="{Binding NouveauCommand}" Margin="16,0,0,0" Padding="10,4"/>
                 <Button Content="Importer depuis l'API" Command="{Binding ImporterDepuisApiCommand}"
                         Margin="8,0,0,0" Padding="10,4" IsEnabled="{Binding ImportEnCours, Converter={StaticResource InverseBoolConverter}}"/>
+                <Button Content="Rafraîchir" Command="{Binding ChargerCommand}" Margin="8,0,0,0" Padding="10,4"/>
             </StackPanel>
 
             <TextBlock DockPanel.Dock="Bottom" Text="{Binding MessageStatut}" Margin="0,8,0,0" Foreground="DimGray"/>
@@ -75,6 +77,15 @@
                     <DataGridTextColumn Header="Prix (€)" Binding="{Binding Prix, StringFormat={}{0:N2}}" Width="90"/>
                     <DataGridTextColumn Header="Stock" Binding="{Binding Stock}" Width="70"/>
                     <DataGridTextColumn Header="Seuil bas" Binding="{Binding SeuilBas}" Width="80"/>
+                    <DataGridTemplateColumn Header="Statut" Width="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding EstEnAlerte, Converter={StaticResource StatutConverter}}"
+                                           Foreground="{Binding EstEnAlerte, Converter={StaticResource AlertBrushConverter}}"
+                                           FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

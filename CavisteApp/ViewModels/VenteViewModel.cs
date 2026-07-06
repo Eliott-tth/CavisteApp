@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -45,6 +45,7 @@ public partial class VenteViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Vin> vinsDisponibles = new();
     [ObservableProperty] private ObservableCollection<Client> clientsDisponibles = new();
     [ObservableProperty] private ObservableCollection<LignePanier> panier = new();
+    [ObservableProperty] private ObservableCollection<Vente> historiqueVentes = new();
 
     [ObservableProperty] private Client? clientSelectionne;
     [ObservableProperty] private Vin? vinSelectionne;
@@ -68,6 +69,9 @@ public partial class VenteViewModel : ObservableObject
 
         var clients = await _clientService.ListerAsync();
         ClientsDisponibles = new ObservableCollection<Client>(clients);
+
+        var ventes = await _venteService.ListerAsync();
+        HistoriqueVentes = new ObservableCollection<Vente>(ventes);
     }
 
     [RelayCommand]

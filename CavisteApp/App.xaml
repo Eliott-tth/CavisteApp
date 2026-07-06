@@ -3,6 +3,78 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="CouleurPrincipale" Color="#7A1F2B"/>
+            <SolidColorBrush x:Key="CouleurPrincipaleFoncee" Color="#5C1220"/>
+            <SolidColorBrush x:Key="CouleurFond" Color="#F7F1EE"/>
 
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource CouleurPrincipale}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="10,6"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource CouleurPrincipaleFoncee}"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="#C9B8BA"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="Background" Value="{StaticResource CouleurPrincipale}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Padding" Value="8,6"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+            </Style>
+
+            <Style TargetType="DataGrid">
+                <Setter Property="RowBackground" Value="White"/>
+                <Setter Property="AlternatingRowBackground" Value="#FBF6F4"/>
+                <Setter Property="BorderBrush" Value="#E0D5D2"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="HeadersVisibility" Value="Column"/>
+                <Setter Property="RowHeaderWidth" Value="0"/>
+            </Style>
+
+            <Style TargetType="TabItem">
+                <Setter Property="MinWidth" Value="170"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border x:Name="Bordure" Background="{StaticResource CouleurPrincipaleFoncee}" Padding="16,12">
+                                <ContentPresenter ContentSource="Header" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                   TextElement.Foreground="White"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Bordure" Property="Background" Value="{StaticResource CouleurPrincipale}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="TabControl">
+                <Setter Property="Background" Value="{StaticResource CouleurFond}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

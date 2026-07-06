@@ -5,16 +5,21 @@ using Microsoft.EntityFrameworkCore;
 namespace CavisteApp.Services;
 
 /// <summary>
-/// CRUD sur l'entité Vin réalisé via EF Core (ORM), conformément à
-/// l'exigence "fonctions CRUD réalisées à l'aide d'un ORM" du cahier des charges.
+/// CRUD sur l'entité Vin réalisé via EF Core (ORM). Toute modification qui
+/// touche au stock déclenche automatiquement la vérification d'alerte. La
+/// "suppression" est une suppression douce (EstSupprime) pour ne jamais casser
+/// l'historique des ventes/commandes qui référencent déjà le vin.
 /// </summary>
 public class VinService
 {
+    private readonly AlerteAutomatiqueService _alerteService = new();
+
     public async Task<List<Vin>> ListerAsync()
     {
         using var db = new CavisteDbContext();
         return await db.Vins
             .Include(v => v.Fournisseur)
+            .Where(v => !v.EstSupprime)
             .OrderBy(v => v.Nom)
             .ToListAsync();
     }
@@ -24,6 +29,7 @@ public class VinService
         using var db = new CavisteDbContext();
         db.Vins.Add(vin);
         await db.SaveChangesAsync();
+        await _alerteService.VerifierApresModificationStockAsync(vin);
         return vin;
     }
 
@@ -39,15 +45,29 @@ public class VinService
         using var db = new CavisteDbContext();
         db.Vins.Update(vin);
         await db.SaveChangesAsync();
+        await _alerteService.VerifierApresModificationStockAsync(vin);
     }
 
+    /// <summary>
+    /// Retire le vin du catalogue. Si aucune vente/commande ne le référence,
+    /// il est vraiment effacé ; sinon (contrainte FOREIGN KEY), il est
+    /// simplement masqué (EstSupprime = true) pour préserver l'historique.
+    /// </summary>
     public async Task SupprimerAsync(int id)
     {
         using var db = new CavisteDbContext();
         var vin = await db.Vins.FindAsync(id);
-        if (vin is not null)
+        if (vin is null) return;
+
+        try
         {
             db.Vins.Remove(vin);
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            db.Entry(vin).State = EntityState.Unchanged;
+            vin.EstSupprime = true;
             await db.SaveChangesAsync();
         }
     }
@@ -61,6 +81,7 @@ public class VinService
         {
             vin.Stock += quantiteDelta;
             await db.SaveChangesAsync();
+            await _alerteService.VerifierApresModificationStockAsync(vin);
         }
     }
 
@@ -68,6 +89,6 @@ public class VinService
     public async Task<List<Vin>> ListerVinsEnAlerteAsync()
     {
         using var db = new CavisteDbContext();
-        return await db.Vins.Where(v => v.Stock <= v.SeuilBas).ToListAsync();
+        return await db.Vins.Where(v => !v.EstSupprime && v.Stock <= v.SeuilBas).ToListAsync();
     }
 }

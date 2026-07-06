@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CavisteApp.Views.VenteView"
+<UserControl x:Class="CavisteApp.Views.VenteView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:CavisteApp.ViewModels">
@@ -22,24 +22,45 @@
             <TextBlock DockPanel.Dock="Bottom" Text="{Binding MessageStatut}" Margin="0,8,0,0"
                        Foreground="DimGray" TextWrapping="Wrap"/>
 
-            <DataGrid ItemsSource="{Binding Panier}" AutoGenerateColumns="False"
-                      IsReadOnly="True" CanUserAddRows="False" GridLinesVisibility="Horizontal">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Vin" Binding="{Binding Vin.Nom}" Width="*"/>
-                    <DataGridTextColumn Header="Qté" Binding="{Binding Quantite}" Width="70"/>
-                    <DataGridTextColumn Header="P.U. (€)" Binding="{Binding Vin.Prix, StringFormat={}{0:N2}}" Width="90"/>
-                    <DataGridTextColumn Header="Sous-total (€)" Binding="{Binding SousTotal, StringFormat={}{0:N2}}" Width="120"/>
-                    <DataGridTemplateColumn Header="Actions" Width="90">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Retirer"
-                                        Command="{Binding DataContext.RetirerDuPanierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding}" Padding="6,2"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0" ItemsSource="{Binding Panier}" AutoGenerateColumns="False"
+                          IsReadOnly="True" CanUserAddRows="False" GridLinesVisibility="Horizontal">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Vin" Binding="{Binding Vin.Nom}" Width="*"/>
+                        <DataGridTextColumn Header="Qté" Binding="{Binding Quantite}" Width="70"/>
+                        <DataGridTextColumn Header="P.U. (€)" Binding="{Binding Vin.Prix, StringFormat={}{0:N2}}" Width="90"/>
+                        <DataGridTextColumn Header="Sous-total (€)" Binding="{Binding SousTotal, StringFormat={}{0:N2}}" Width="120"/>
+                        <DataGridTemplateColumn Header="Actions" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Retirer"
+                                            Command="{Binding DataContext.RetirerDuPanierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" Padding="6,2"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <TextBlock Grid.Row="1" Text="Historique des ventes" FontWeight="Bold" FontSize="15" Margin="0,16,0,8"/>
+
+                <DataGrid Grid.Row="2" ItemsSource="{Binding HistoriqueVentes}" AutoGenerateColumns="False"
+                          IsReadOnly="True" CanUserAddRows="False" GridLinesVisibility="Horizontal">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="N°" Binding="{Binding Id}" Width="50"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding DateVente, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="140"/>
+                        <DataGridTextColumn Header="Client" Binding="{Binding Client.NomComplet}" Width="*"/>
+                        <DataGridTextColumn Header="Articles" Binding="{Binding Lignes.Count}" Width="70"/>
+                        <DataGridTextColumn Header="Total (€)" Binding="{Binding MontantTotal, StringFormat={}{0:N2}}" Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </DockPanel>
 
         <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Padding="16" CornerRadius="4">
