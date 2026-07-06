@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="CavisteApp.Views.VenteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:CavisteApp.ViewModels">
+
+    <UserControl.DataContext>
+        <vm:VenteViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="360"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Column="0" Margin="0,0,12,0">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBlock Text="Nouvelle vente" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Button Content="Rafraîchir" Command="{Binding RafraichirCommand}" Margin="16,0,0,0" Padding="10,4"/>
+            </StackPanel>
+
+            <TextBlock DockPanel.Dock="Bottom" Text="{Binding MessageStatut}" Margin="0,8,0,0"
+                       Foreground="DimGray" TextWrapping="Wrap"/>
+
+            <DataGrid ItemsSource="{Binding Panier}" AutoGenerateColumns="False"
+                      IsReadOnly="True" CanUserAddRows="False" GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Vin" Binding="{Binding Vin.Nom}" Width="*"/>
+                    <DataGridTextColumn Header="Qté" Binding="{Binding Quantite}" Width="70"/>
+                    <DataGridTextColumn Header="P.U. (€)" Binding="{Binding Vin.Prix, StringFormat={}{0:N2}}" Width="90"/>
+                    <DataGridTextColumn Header="Sous-total (€)" Binding="{Binding SousTotal, StringFormat={}{0:N2}}" Width="120"/>
+                    <DataGridTemplateColumn Header="Actions" Width="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Retirer"
+                                        Command="{Binding DataContext.RetirerDuPanierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" Padding="6,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Padding="16" CornerRadius="4">
+            <StackPanel>
+                <TextBlock Text="Client" FontWeight="Bold" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding ClientsDisponibles}" SelectedItem="{Binding ClientSelectionne}"
+                          DisplayMemberPath="NomComplet" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Vin" FontWeight="Bold" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding VinsDisponibles}" SelectedItem="{Binding VinSelectionne}"
+                          DisplayMemberPath="Nom" Margin="0,0,0,10"/>
+
+                <TextBlock Text="Quantité"/>
+                <TextBox Text="{Binding QuantiteAAjouter, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,10"/>
+
+                <Button Content="Ajouter au panier" Command="{Binding AjouterAuPanierCommand}"
+                        Padding="10,6" Margin="0,0,0,20"/>
+
+                <Separator Margin="0,0,0,16"/>
+
+                <TextBlock Text="{Binding MontantTotal, StringFormat='Total : {0:N2} €'}"
+                           FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                <Button Content="Valider la vente" Command="{Binding ValiderVenteCommand}"
+                        Padding="10,8" Margin="0,0,0,8" Background="#2C2A28" Foreground="White"/>
+                <Button Content="Vider le panier" Command="{Binding ViderPanierCommand}"
+                        Padding="10,6" Margin="0,0,0,8"/>
+                <Button Content="Ouvrir le dernier ticket" Command="{Binding OuvrirDernierTicketCommand}"
+                        Padding="10,6"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
